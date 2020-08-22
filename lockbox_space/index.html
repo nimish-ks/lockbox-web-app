@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>lockbox - Share secrets with seamless end-to-end encryption. - Public Beta</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="vendor/css/open-iconic.css" rel="stylesheet">
+  <link href="vendor/prism/prism.css" rel="stylesheet">
+
+  <!-- JavaScript -->
+  <script src="vendor/jquery/jquery.slim.min.js"></script>
+  <script src="vendor/lockbox/js/lockbox.js"></script>
+  <script src="vendor/ace/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>  
+  <script src="vendor/lockbox/js/qrcode.min.js"></script>
+  <script src="vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="vendor/ace/theme-tomorrow_night_eighties.js" type="text/javascript" charset="utf-8"></script>
+  <script src="vendor/ace/theme-chrome.js" type="text/javascript" charset="utf-8"></script>
+  <script src="vendor/ace/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+  <script src="vendor/ace/mode-python.js" type="text/javascript" charset="utf-8"></script>
+  <script src="vendor/ace/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
+  <script src="vendor/ace/mode-html.js" type="text/javascript" charset="utf-8"></script>
+  <script src="vendor/prism/prism.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<style>
+body {
+  background-color: #292a2d !important;
+}
+textarea {
+  background-color:#222;
+  color:#fff;
+  border: 1px solid #222; 
+  white-space: pre-wrap;
+  padding:15px;
+  border-radius:4px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+input {
+  background-color:#353b48;
+  color:#fff;
+  padding:15px;
+  border: 1px solid #888; 
+  border-radius:4px;
+}
+::placeholder{
+  color:#FFF;
+}
+h1, p, li {
+  color:#fff!important;
+}
+button {
+  padding:10px 50px;
+  border-radius: 4px;
+  outline:0!important;
+}
+.btn-dark{
+  color:#149678!important;
+  border:1px solid #149678;
+}
+.lockbox-banner {
+  background-color: #252627;
+}
+#data{
+  white-space: pre-wrap;
+  color:rgb(20, 150, 120);
+  text-align: left;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+#code-input {
+    position: relative;
+    width: 100%;
+    height: 600px;
+}
+input{
+  background-color: #222;
+  border:none!important;
+}
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.valueSpan {
+  color:#149678 !important;
+}
+/*slider thumb */
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+  border:transparent;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #149678;
+  /*height: 36px;
+  width: 16px;
+  border-radius: 3px;*/
+  background: #149678;
+  cursor: pointer;
+  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  
+  border: 1px solid #149678;
+  /*height: 36px;
+  width: 16px;
+  border-radius: 3px;*/
+  background: #149678;
+  cursor: pointer;
+}
+
+/* All the same stuff for IE */
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #292a2d;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+}
+/* slider track */
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;  
+  background: #222;
+  border: 0.2px solid #292a2d;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #367ebd;
+  border: 0.2px solid #292a2d;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;  
+  cursor: pointer;  
+  background: #222;  
+  border: 0.2px solid #292a2d;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;  
+  color: transparent;
+  border:none!important;
+}
+input[type=range]::-ms-fill-lower {
+  background: #222;
+  border:none!important;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #222;
+  border:none!important;
+}
+input[type=range]::-ms-fill-upper {
+  background: #222;  
+  border:none!important;
+  
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #222;
+  border:none!important;
+}
+</style>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg lockbox-banner navbar-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href=""><img src="android-chrome-192x192.png" style="margin-right:10px; height:30px;"/>lockbox BETA</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+
+         
+
+
+        <h1 class="mt-5">lockbox.space</h1>
+        <p class="lead">Share secrets with seamless end-to-end encryption.</p>
+        
+      </div>
+      <div class="col-lg-12 text-center" id="send-wrapper" style="transition:all 0.5;">
+        
+        <div class="col-lg-12">
+          <!-- Tabs -->
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="lbText" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><span class="oi" data-glyph="text" title="lock-unlocked" aria-hidden="false"></span><br/>Secure Note</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="lbLogin" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><span class="oi" data-glyph="account-login" title="lock-unlocked" aria-hidden="false"></span><br/>Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="lbCode" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><span class="oi" data-glyph="code" title="lock-unlocked" aria-hidden="false"></span><br/>Code Snippet</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <textarea id="input" placeholder="Type or Ctrl + V" cols="80" rows="10" onInput="sendTextChangeHandler();"></textarea>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <input id="input_username" placeholder="Email/Username" onInput="sendTextChangeHandler();" style="margin-top:25px;"></input><br><br>
+              <input id="input_pw" type="password" placeholder="Pasword" onInput="sendTextChangeHandler();"></input>
+            </div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-bottom:5px;"> 
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <button type="button" class="btn btn-secondary" onClick="setModeHTML();">HTML</button>
+                    <button type="button" class="btn btn-secondary" onClick="setModeJavascript();">Javscript</button>
+                    <button type="button" class="btn btn-secondary" onClick="setModePython();">Python</button>
+                    <button type="button" class="btn btn-secondary" onClick="setModeCPP();">C</button>
+                </div>
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                  <button type="button" class="btn btn-secondary" onClick="setDark();">Dark</button>
+                  <button type="button" class="btn btn-secondary" onClick="setLight();">Light</button>                  
+                </div>                
+              </div>
+              <div id="code-input"></div>
+            </div>
+          </div>
+          <!-- End Tabs -->
+        </div>
+
+
+       
+
+      </div>
+      <div class="col-lg-12 text center" id="linkControls">
+        <!-- Expiry Slider-->
+        <div class="d-flex justify-content-center my-4" id="sliderWrapper">          
+          <div class="w-50">
+            <label for="expirySlider" style="color:#fff;">Link Expiry: </label><span class="font-weight-bold text-primary ml-2 valueSpan"></span>
+            <input type="range" class="custom-range" id="expirySlider" min="1" max="365" value="30">
+          </div>
+          
+        </div>
+        <!-- End slider -->
+        
+        <!-- Lock button -->
+        <div class="col-lg-12 text-center" style="margin-top:15px;">
+          <button class="btn-danger" id="send" onClick="sendInputHandler();"><span class="oi" data-glyph="lock-unlocked" title="lock-unlocked" aria-hidden="false"></span>Lock</button>               
+        </div> 
+      </div>
+
+      <!--Loader + Link + QR Code-->
+      <div class="col-lg-12 text-center" style="margin-top:15px;">          
+          <div id="loader" class="spinner-border text-light" role="status" style="text-align:center;color:#149678 !important;font-size:24px;display:none;">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div> 
+      
+      <div class="row" style="margin-top:15px; width:100%" id="links">                
+        <div class="col-sm-12 text-center">
+            <code id="url" class="text-center no-select" style="display:inline-block; font-size: 20px;"></code>
+            <button id="copy-btn" type="button" class="btn btn-outline-secondary" style="margin-left:5px;display:none;" onClick="copyURL();"><span class="oi" data-glyph="clipboard" title="Copy to Clipboard" aria-hidden="false"></span></button>        
+        </div>        
+        <div class="col-sm-12 text-center">
+          <div id="qrcode" style="height:256px;margin-top:10px;display:none"></div>
+        </div>
+        
+      </div>
+      
+      <!-- End link + QR-->      
+      <div id="recv-wrapper" class="col-lg-12 text-center" style="margin-top:15px;">
+        <div style="margin-top:15px;">          
+          <div id="recv-loader" class="spinner-border text-light" role="status" style="visibility:hidden;color:#149678 !important;font-size:24px;">
+              <span class="sr-only">Loading...</span>
+          </div>
+          
+          <code id="data" style="display:none;"></code>          
+          <div id="prism-wrapper" style="display:none;">
+            <pre><code id="code-data"></code></pre>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+<script>
+    var editor = ace.edit("code-input");
+    editor.setTheme("ace/theme/tomorrow_night_eighties");
+    editor.setShowPrintMargin(false);
+    var JavaScriptMode = ace.require("ace/mode/javascript").Mode;
+    var PythonMode = ace.require("ace/mode/python").Mode;
+    var CPPMode = ace.require("ace/mode/c_cpp").Mode;
+    var HTMLMode = ace.require("ace/mode/html").Mode;
+    editor.session.setMode(new JavaScriptMode());
+    document.getElementById('code-input').style.fontSize='16px';
+    editor.on("change",sendTextChangeHandler);  
+    function setModeJavascript(){             
+      editor.session.setMode(new JavaScriptMode());
+      setLang('js');
+    }
+
+    function setModePython(){             
+        editor.session.setMode(new PythonMode());
+        setLang('python');
+    }
+
+    function setModeCPP(){             
+        editor.session.setMode(new CPPMode());
+        setLang('cpp');
+    }
+
+    function setModeHTML(){             
+        editor.session.setMode(new HTMLMode());
+        setLang('html');
+    }
+
+    function setDark(){             
+        editor.setTheme("ace/theme/tomorrow_night_eighties");
+    }
+
+    function setLight(){             
+        editor.setTheme("ace/theme/chrome");
+    }
+</script>
+</body>
+
+</html>
