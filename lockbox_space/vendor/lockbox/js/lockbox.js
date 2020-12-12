@@ -316,6 +316,23 @@ async function postData(data = {}, url = "", token = "") {
   return await response.json(); // parses JSON response into native JavaScript objects
 }
 
+//Makes delete request to API
+async function deleteData(data = {}, url = "", token = "") {
+  const response = await fetch(url, {
+    method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    redirect: "follow", // manual, *follow, error
+    referrer: "no-referrer", // no-referrer, *client
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return await response.json(); // parses JSON response into native JavaScript objects
+}
+
 //Makes get request to API
 async function getData(url = "", token = "") {
   const response = await fetch(url, {
@@ -358,7 +375,7 @@ async function fetchData(sentence) {
     const hashStr = await getBoxIdentifier(sentence);
     const response = await getData(api_base_url + "?hash=" + hashStr);
 
-    console.log(response);
+    //console.log(response);
     if (response && response != 404) {
       pt = await lb_decrypt(s, response.data);
       document.getElementById("input").style.display = "none";
@@ -371,6 +388,15 @@ async function fetchData(sentence) {
       if (type == "lbText") {
         document.getElementById("data").innerHTML = pt_json.data;
         document.getElementById("data").style.display = "block";
+        
+        $('#download').click(function(){
+          download(sentence+'.txt', document.getElementById("data").innerHTML)
+        })
+        $('#deleteBox').click(function(){
+          deleteBox(sentence)
+        })
+        $('#download').show();
+        $('#deleteBox').show();
       } else if (type == "lbLogin") {
         document.getElementById("data").innerHTML =
           "Username: <b>" +
@@ -386,13 +412,31 @@ async function fetchData(sentence) {
           pt_json.data.split(",")[1].toString() +
           '\');"><span class="oi" data-glyph="clipboard" title="Copy Password" aria-hidden="false"></span></button>';
         document.getElementById("data").style.display = "block";
+        let textData = "Username: " + pt_json.data.split(",")[0] + "\nPassword: " + pt_json.data.split(",")[1]
+        $('#download').click(function(){
+          download(sentence+'.txt', textData)
+        })
+        $('#deleteBox').click(function(){
+          deleteBox(sentence)
+        })
+        $('#download').show();
+        $('#deleteBox').show();
       } else if (type == "lbCode") {
         var langClass = "language-" + pt_json.lang;
 
         document.getElementById("code-data").innerHTML = pt_json.data;
         document.getElementById("code-data").className = langClass;
         document.getElementById("prism-wrapper").style.display = "block";
+       
         Prism.highlightAll();
+        $('#download').click(function(){
+          download(sentence+'.txt', document.getElementById("code-data").innerHTML)
+        })
+        $('#deleteBox').click(function(){
+          deleteBox(sentence)
+        })
+        $('#download').show();
+        $('#deleteBox').show();
       }
 
       document.getElementById("recv-loader").style.display = "none";
@@ -428,4 +472,30 @@ function copyText(text) {
   );
 }
   
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}  
+
+deleteBox = async sentence => {  
+  if (confirm("This will permanently delete your data. Are you sure?")){
+    const boxId = await getBoxIdentifier(sentence);
+    const response = await deleteData(
+      { hash: boxId },
+      api_base_url
+    );
+    window.location.reload();
+  }
+  else {
+    return false;
+  }
   
+}

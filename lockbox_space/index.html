@@ -328,7 +328,7 @@ input[type=range]:focus::-ms-fill-upper {
       </div>
       
       <!-- End link + QR-->      
-      <div id="recv-wrapper" class="col-lg-12 text-center" style="margin-top:15px;">
+     <div id="recv-wrapper" class="col-lg-12 text-center" style="margin-top:15px;">
         <div style="margin-top:15px;">          
           <div id="recv-loader" class="spinner-border text-light" role="status" style="visibility:hidden;color:#149678 !important;font-size:24px;">
               <span class="sr-only">Loading...</span>
@@ -338,6 +338,11 @@ input[type=range]:focus::-ms-fill-upper {
           <div id="prism-wrapper" style="display:none;">
             <pre><code id="code-data"></code></pre>
           </div>
+          <div id="recv-buttons" style="margin-top:10px;">
+            <button class="btn btn-success" id="download" style="display:none;"><span class="oi" data-glyph="cloud-download" title="download" aria-hidden="false"></span> Download</button>
+            <button class="btn btn-danger" id="deleteBox" style="display:none;"><span class="oi" data-glyph="trash" title="delete" aria-hidden="false"></span> Delete</button>
+          </div>
+          
         </div>
       </div>
 
