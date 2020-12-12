@@ -203,7 +203,7 @@ async function sendInputHandler() {
     });
   }
 
-  if (JSON.parse(data).data == "") {
+  if ((JSON.parse(data).data == "") || (activeTab == "lbLogin" && JSON.parse(data).data == ",")) {
     alert("Box is empty");
     document.getElementById("url").innerHTML = "Box is empty!";
     if (document.getElementById("url").style.display === "none") {
