@@ -390,7 +390,7 @@ async function fetchData(sentence) {
         document.getElementById("data").style.display = "block";
         
         $('#download').click(function(){
-          download(sentence+'.txt', document.getElementById("data").innerHTML)
+          download('Lockbox-Download-'+sentence+'.txt', document.getElementById("data").innerHTML)
         })
         $('#deleteBox').click(function(){
           deleteBox(sentence)
